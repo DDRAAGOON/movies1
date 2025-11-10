@@ -19,17 +19,17 @@ class ForgetPasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.black,
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: AppColors.black,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.primary),
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.yellow),
           onPressed: () {},
         ),
         title: const Text(
           "Forget Password",
-          style: TextStyle(color: AppColors.primary, fontSize: 16),
+          style: TextStyle(color: AppColors.yellow, fontSize: 16),
         ),
         centerTitle: true,
       ),
@@ -40,22 +40,29 @@ class ForgetPasswordPage extends StatelessWidget {
             const SizedBox(height: 30),
 
             Image.asset(
-              'assets/forget/Forget.png',
-              height: 250,
+              'lib/assets/forget/Forgot.png',
+              height: 430,
+              width: 430,
             ),
             const SizedBox(height: 40),
 
             TextField(
+              style: const TextStyle(
+                color: AppColors.white,
+                fontSize: 16,
+              ),
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.email, color: AppColors.white),
                 hintText: "Email",
-                hintStyle: const TextStyle(color: AppColors.white),
+                hintStyle: const TextStyle(color: Colors.white54),
                 filled: true,
-                fillColor:  AppColors.gray,
+                fillColor: AppColors.gray,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide.none,
                 ),
+                contentPadding:
+                const EdgeInsets.symmetric(horizontal: 15, vertical: 18),
               ),
             ),
             const SizedBox(height: 25),
@@ -64,7 +71,7 @@ class ForgetPasswordPage extends StatelessWidget {
               height: 55,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: AppColors.yellow,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
