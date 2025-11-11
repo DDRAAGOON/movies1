@@ -1,10 +1,9 @@
 
 import 'package:flutter/material.dart';
-import 'package:movies1/Utls/colors.dart';
 import 'package:movies1/Utls/images.dart';
 import 'package:movies1/Utls/textStyle.dart';
 import 'package:movies1/widget/toogle.dart';
-
+import '../../Utls/colors.dart';
 import '../../widget/customElevatedButton.dart';
 import '../../widget/custom_text_field.dart';
 final formkey=GlobalKey<FormState>();
@@ -35,7 +34,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       backgroundColor: AppColors.blackColor,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: AppColors.blackColor),
+        iconTheme: IconThemeData(color: AppColors.prirmaryColor),
         backgroundColor: AppColors.blackColor,
         title: Text('Register', style: AppStyle.med14primary,),
         centerTitle: true,),

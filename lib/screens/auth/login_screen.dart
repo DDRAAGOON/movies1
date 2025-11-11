@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:movies1/Utls/colors.dart';
 import 'package:movies1/Utls/images.dart';
 import 'package:movies1/Utls/textStyle.dart';
+import 'package:movies1/screens/auth/register_screen.dart';
 import 'package:movies1/widget/toogle.dart';
 import '../../widget/customElevatedButton.dart';
 import '../../widget/custom_text_field.dart';
+import 'forget_password_screen.dart';
 
 final formkey = GlobalKey<FormState>();
 
@@ -22,7 +24,7 @@ class _LoginscreenState extends State<Loginscreen> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.blackColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -61,7 +63,10 @@ class _LoginscreenState extends State<Loginscreen> {
                     SizedBox(height: height * 0.02),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/forget-password');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ForgetPasswordApp()),
+                        );
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -95,8 +100,12 @@ elevatedcolor: AppColors.prirmaryColor,
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.of(context).pushNamed('/register');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => RegisterScreen()),
+                            );
                           },
+
                           child: Text(
                             'Create One',
                             style: AppStyle.med14primary,

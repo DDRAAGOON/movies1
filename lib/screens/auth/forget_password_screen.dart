@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:movies1/core/app_colors.dart';
 
+import 'login_screen.dart';
+
 class ForgetPasswordApp extends StatelessWidget {
   const ForgetPasswordApp({super.key});
 
@@ -25,7 +27,12 @@ class ForgetPasswordPage extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: AppColors.yellow),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => Loginscreen()),
+            );
+          },
         ),
         title: const Text(
           "Forget Password",
