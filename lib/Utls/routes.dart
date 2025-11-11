@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:movies1/screens/auth/forget_password_screen.dart';
 import 'package:movies1/screens/auth/login_screen.dart';
 import 'package:movies1/screens/auth/register_screen.dart';
-import 'package:movies1/screens/home/home_screen.dart';
-import 'package:movies1/screens/movie_details/movie_details_screen.dart';
-import 'package:movies1/screens/onboarding/onboarding_screen.dart';
 import 'package:movies1/screens/profile/update_profile_screen.dart';
 
 class AppRoutes {
@@ -17,10 +14,9 @@ class AppRoutes {
   static const String updateProfile = '/update-profile';
 
   static Map<String, WidgetBuilder> routes = {
-    onboarding: (context) => OnboardingScreen(),
     login: (context) => Loginscreen(),
     register: (context) => RegisterScreen(),
     forgetPassword: (context) => ForgetPasswordApp(),
-    updateProfile: (context) => UpdateProfileScreen(),
+    updateProfile: (context) => UpdateProfilePage(),
   };
 }
