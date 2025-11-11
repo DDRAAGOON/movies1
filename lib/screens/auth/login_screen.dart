@@ -143,8 +143,41 @@ elevatedcolor: AppColors.prirmaryColor,
                     SizedBox(height: height * 0.02),
                     Customelevatedbuttom(
                       elevatedcolor: AppColors.prirmaryColor,
-                      onPressed:  (){},
-
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              title: const Text(
+                                'Alert message',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              content: const Text('Success login with google '),
+                              actionsAlignment: MainAxisAlignment.center,
+                              actions: [
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.green,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text(
+                                    'Ok',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                       elevatedchild: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                            children: [
