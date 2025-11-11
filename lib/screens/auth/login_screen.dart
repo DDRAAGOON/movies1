@@ -1,28 +1,22 @@
-
 import 'package:flutter/material.dart';
 import 'package:movies1/Utls/colors.dart';
 import 'package:movies1/Utls/images.dart';
 import 'package:movies1/Utls/textStyle.dart';
 import 'package:movies1/widget/toogle.dart';
-
 import '../../widget/customElevatedButton.dart';
 import '../../widget/custom_text_field.dart';
-
-
 
 final formkey = GlobalKey<FormState>();
 
 class Loginscreen extends StatefulWidget {
-  Loginscreen({super.key});
+  const Loginscreen({super.key});
 
   @override
   State<Loginscreen> createState() => _LoginscreenState();
 }
-
 class _LoginscreenState extends State<Loginscreen> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -162,8 +156,4 @@ elevatedcolor: AppColors.prirmaryColor,
       ),
     );
   }
-
-
-
-
 }
