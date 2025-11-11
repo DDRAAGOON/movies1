@@ -9,7 +9,7 @@ import '../../widget/customElevatedButton.dart';
 import '../../widget/custom_text_field.dart';
 final formkey=GlobalKey<FormState>();
 class RegisterScreen extends StatefulWidget {
-  RegisterScreen({super.key});
+  const RegisterScreen({super.key});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -28,7 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         .of(context)
         .size
         .height;
-    var width = MediaQuery
+    var _ = MediaQuery
         .of(context)
         .size
         .width;
@@ -102,7 +102,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       hintstyle: AppStyle.med16white,
                       ),
                       SizedBox(height: height * 0.02,),
-                      Customelevatedbuttom(onPressed: (){},
+                      Customelevatedbuttom(onPressed: (){
+                        Navigator.of(context).pushReplacementNamed('/home');
+                      },
                         elevatedchild: Text('Create Account',
                           style: AppStyle.med20black,),
                         elevatedcolor: AppColors.prirmaryColor,),
@@ -114,7 +116,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                              'Already Have Account?',
                             style: AppStyle.med14white),
                           TextButton(
-                              onPressed: () {}, child: Text('Login', style: AppStyle.med14primary
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              }, child: Text('Login', style: AppStyle.med14primary
                               .copyWith(
                             decoration: TextDecoration.underline,
                           ),))

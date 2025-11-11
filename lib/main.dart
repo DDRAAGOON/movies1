@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movies1/screens/auth/login_screen.dart';
-import 'package:movies1/screens/auth/register_screen.dart';
+import 'package:movies1/Utls/routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +13,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Loginscreen(),
+      initialRoute: AppRoutes.login,
+      routes: AppRoutes.routes,
       themeMode: ThemeMode.dark,
-    )
-    ;}}
+    );
+  }
+}

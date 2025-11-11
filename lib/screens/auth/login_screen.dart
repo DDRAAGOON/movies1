@@ -67,7 +67,7 @@ class _LoginscreenState extends State<Loginscreen> {
                     SizedBox(height: height * 0.02),
                     TextButton(
                       onPressed: () {
-                        //todo navigate to forget password screen
+                        Navigator.of(context).pushNamed('/forget-password');
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -82,7 +82,9 @@ class _LoginscreenState extends State<Loginscreen> {
                     SizedBox(height: height * 0.02),
                     Customelevatedbuttom(
 
-                      onPressed:  (){},
+                      onPressed:  (){
+                        Navigator.of(context).pushReplacementNamed('/home');
+                      },
 elevatedcolor: AppColors.prirmaryColor,
                        elevatedchild: Text(
                   'Login',
@@ -99,9 +101,7 @@ elevatedcolor: AppColors.prirmaryColor,
                         ),
                         TextButton(
                           onPressed: () {
-                            // Navigator.of(
-                            //   context,
-                            // ).pushNamed(Approuts.registerScreen);
+                            Navigator.of(context).pushNamed('/register');
                           },
                           child: Text(
                             'Create One',
