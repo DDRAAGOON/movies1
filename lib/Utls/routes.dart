@@ -20,9 +20,7 @@ class AppRoutes {
     onboarding: (context) => OnboardingScreen(),
     login: (context) => Loginscreen(),
     register: (context) => RegisterScreen(),
-    forgetPassword: (context) => ForgetPasswordScreen(),
-    home: (context) => HomeScreen(),
-    movieDetails: (context) => MovieDetailsScreen(),
+    forgetPassword: (context) => ForgetPasswordApp(),
     updateProfile: (context) => UpdateProfileScreen(),
   };
 }

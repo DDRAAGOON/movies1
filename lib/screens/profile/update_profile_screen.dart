@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../core/app_colors.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+class UpdateProfilePage extends StatelessWidget {
+  const UpdateProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {

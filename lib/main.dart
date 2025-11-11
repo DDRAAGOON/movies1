@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies1/screens/auth/forget_password_screen.dart';
+import 'package:movies1/screens/auth/login_screen.dart';
 import 'package:movies1/screens/profile/update_profile_screen.dart';
 
 void main() {
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ProfilePage(),
+      home: Loginscreen(),
     );
   }
 }
