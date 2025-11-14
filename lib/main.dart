@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:movies1/home/utils/app_routes.dart';
 import 'package:movies1/screens/auth/forget_password_screen.dart';
 import 'package:movies1/screens/auth/login_screen.dart';
+import 'package:movies1/screens/home/home_screen.dart';
 import 'package:movies1/screens/profile/update_profile_screen.dart';
 
 void main() {
@@ -13,7 +15,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Loginscreen(),
+      debugShowCheckedModeBanner: false,
+initialRoute: AppRoutes.homeRouteName,
+      routes: {AppRoutes.homeRouteName : (context) => HomeScreen()
+      },
     );
   }
 }
