@@ -1,13 +1,13 @@
 class AppImages{
-  static const String passIcon='lib/assets/icon/passwordIcon.png';
-  static const String emailIcon='lib/assets/icon/emailIcon.png';
-  static const String group='lib/assets/icon/Group.png';
-  static const String hiddenIcon='lib/assets/icon/hiddenIcon.png';
-  static const String googleIcon='lib/assets/icon/googleIcon.png';
-  static const String registerImage='lib/assets/icon/registerImage.png';
-  static const String nameIcon='lib/assets/icon/nameIcon.png';
-  static const String phoneIcon='lib/assets/icon/phoneIcon.png';
-  static const String egIcon='lib/assets/icon/egIcon.png';
-  static const String usIcon='lib/assets/icon/usIcon.png';
+  static const String passIcon='assets/icon/passwordIcon.png';
+  static const String emailIcon='assets/icon/emailIcon.png';
+  static const String group='assets/icon/Group.png';
+  static const String hiddenIcon='assets/icon/hiddenIcon.png';
+  static const String googleIcon='assets/icon/googleIcon.png';
+  static const String registerImage='assets/icon/registerImage.png';
+  static const String nameIcon='assets/icon/nameIcon.png';
+  static const String phoneIcon='assets/icon/phoneIcon.png';
+  static const String egIcon='assets/icon/egIcon.png';
+  static const String usIcon='assets/icon/usIcon.png';
 
 }

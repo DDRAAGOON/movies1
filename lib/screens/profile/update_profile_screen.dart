@@ -34,7 +34,7 @@ class ProfileBody extends StatelessWidget {
                     Column(
                       children: [
                         Image.asset(
-                          'lib/assets/edit/gamer.png',
+                          'assets/edit/gamer.png',
                           width: 118,
                           height: 118,
                         ),

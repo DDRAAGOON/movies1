@@ -40,12 +40,14 @@ class Customtextfield extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      maxLines:maxline ,
-      controller:controller ,
+      maxLines: maxline,
+      controller: controller,
       obscuringCharacter: '*',
       obscureText: obscuretext,
-      keyboardType:textInputType ,
+      keyboardType: textInputType,
       validator: validator,
+      cursorColor: Colors.white,
+      style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         fillColor: fillcolor,
         prefixIconColor: prefixiconcolor,

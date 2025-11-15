@@ -1,22 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:movies1/core/app_colors.dart';
 
-import 'login_screen.dart';
+import 'auth_service.dart';
+import 'user_model.dart';
 
-class ForgetPasswordApp extends StatelessWidget {
-  const ForgetPasswordApp({super.key});
+class ForgetPasswordPage extends StatefulWidget {
+  const ForgetPasswordPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const ForgetPasswordPage(),
-    );
-  }
+  State<ForgetPasswordPage> createState() => _ForgetPasswordPageState();
 }
 
-class ForgetPasswordPage extends StatelessWidget {
-  const ForgetPasswordPage({super.key});
+class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
+  final TextEditingController emailController = TextEditingController();
+  bool isLoading = false;
+
+  Future<void> _sendResetEmail() async {
+    final email = emailController.text.trim();
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter your email')),
+      );
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    try {
+      final UserModel res = await AuthService.sendResetEmail(email: email);
+
+      final code = res.statusCode ?? 0;
+      final msg = res.message.isNotEmpty ? res.message : 'Request sent';
+
+      if (code == 200 || code == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(msg)),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(msg)),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+
+    setState(() => isLoading = false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +60,11 @@ class ForgetPasswordPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: AppColors.yellow),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => Loginscreen()),
-            );
+            Navigator.pop(context);
           },
         ),
         title: const Text(
-          "Forget Password",
+          'Forget Password',
           style: TextStyle(color: AppColors.yellow, fontSize: 16),
         ),
         centerTitle: true,
@@ -45,22 +74,21 @@ class ForgetPasswordPage extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 30),
-
             Image.asset(
-              'lib/assets/forget/Forgot.png',
+              'assets/forget/Forgot.png',
               height: 430,
               width: 430,
             ),
             const SizedBox(height: 40),
-
             TextField(
+              controller: emailController,
               style: const TextStyle(
                 color: AppColors.white,
                 fontSize: 16,
               ),
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.email, color: AppColors.white),
-                hintText: "Email",
+                hintText: 'Email',
                 hintStyle: const TextStyle(color: Colors.white54),
                 filled: true,
                 fillColor: AppColors.gray,
@@ -68,8 +96,10 @@ class ForgetPasswordPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide.none,
                 ),
-                contentPadding:
-                const EdgeInsets.symmetric(horizontal: 15, vertical: 18),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 18,
+                ),
               ),
             ),
             const SizedBox(height: 25),
@@ -83,14 +113,23 @@ class ForgetPasswordPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                onPressed: () {},
-                child: const Text(
-                  "Verify Email",
-                  style: TextStyle(
-                    color: AppColors.black,
-                    fontSize: 20,
-                  ),
-                ),
+                onPressed: isLoading ? null : _sendResetEmail,
+                child: isLoading
+                    ? const SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          color: AppColors.black,
+                          strokeWidth: 3,
+                        ),
+                      )
+                    : const Text(
+                        'Verify Email',
+                        style: TextStyle(
+                          color: AppColors.black,
+                          fontSize: 20,
+                        ),
+                      ),
               ),
             ),
           ],

@@ -27,7 +27,6 @@ List<Widget> tabs =[
            Container(
              margin: EdgeInsets.all(15),
              height: 65,
-            // margin: EdgeInsets.all(15),
              decoration: BoxDecoration(
                borderRadius: BorderRadius.circular(16),
              ),

@@ -25,7 +25,6 @@ class ResetPassword extends StatelessWidget {
         ),
       ),
       body: Column(
-        //crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Image.asset(AppAssets.resetPassword,height: height*0.3,),
           CustomTextForm(hintText: 'Old Password',
@@ -45,7 +44,6 @@ class ResetPassword extends StatelessWidget {
           SizedBox(height: height*0.03,),
           ElevatedButton(
               style: ElevatedButton.styleFrom(
-                // fixedSize: Size(400, 60),
                   padding: EdgeInsets.symmetric(horizontal: width*0.3,
                       vertical: height*0.02),
                   backgroundColor: AppColors.orangeColor,
