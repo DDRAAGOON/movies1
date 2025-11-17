@@ -19,7 +19,8 @@ class Customtextfield extends StatelessWidget {
     this.obscuretext=false,
     required this.controller,
     this.maxline=1,
-      this.fillcolor,
+    this.fillcolor,
+      this.textStyle
   });
 
   String? hintText;
@@ -37,9 +38,13 @@ class Customtextfield extends StatelessWidget {
   TextEditingController controller ;
   int maxline;
   Color ?fillcolor=Colors.grey;
+  TextStyle ?textStyle=AppStyle.med16white;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+
+      style: textStyle,
+      cursorColor: AppColors.whiteColor,
       maxLines:maxline ,
       controller:controller ,
       obscuringCharacter: '*',
@@ -47,6 +52,8 @@ class Customtextfield extends StatelessWidget {
       keyboardType:textInputType ,
       validator: validator,
       decoration: InputDecoration(
+        counterStyle: AppStyle.med16white,
+        focusColor: Colors.white,
         fillColor: fillcolor,
         prefixIconColor: prefixiconcolor,
         prefixIcon: prefixicon,

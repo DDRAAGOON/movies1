@@ -18,9 +18,9 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
-
+  var phoneController = TextEditingController();
   var nameController = TextEditingController();
-  var repassworddController = TextEditingController();
+  var rePasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -53,28 +53,67 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Customtextfield(
+
+                        validator: (text) {
+                          if (text == null || text.trim().isEmpty) {
+                            return 'Please Enter Name';
+                          }
+                          final bool namevalid = RegExp(
+                              '!@#<>?":_``~;[]\|=-+)(*&^%1234567890').hasMatch(text);
+                          if (!namevalid) {
+                            return 'Please enter valid,email ';
+                          }
+                        },
                         hintstyle: AppStyle.med16white,
                         fillcolor: AppColors.greyColor,
                         controller: nameController,
+                        textStyle: AppStyle.med16white,
                         textInputType: TextInputType.name,
                         prefixicon: Image.asset(AppImages.nameIcon),
                         hintText: 'Name',
                         borderSideColor: AppColors.greyColor,),
                       SizedBox(height: height * 0.02,),
                       Customtextfield(
+                        validator: (text) {
+                          if (text == null || text.trim().isEmpty) {
+                            return 'Please Enter Email';
+                          }
+                          final bool emailValid = RegExp(
+                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+                          ).hasMatch(text);
+                          if (!emailValid) {
+                            return 'Please enter valid,email ';
+                          }
+                        },
+                        textStyle: AppStyle.med16white,
                         fillcolor: AppColors.greyColor,
-                        controller: nameController,
+                        controller: emailController,
                         textInputType: TextInputType.name,
                         prefixicon: Image.asset(AppImages.emailIcon),
-                        hintText: 'Email',
+                        hintText:'Email',
                         hintstyle: AppStyle.med16white,
                         borderSideColor: AppColors.greyColor,),
                       SizedBox(height: height * 0.02,),
                       Customtextfield(
+                        validator: (text) {
+                          RegExp regex =
+                          RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+                          if (text!.isEmpty) {
+                            return 'Please enter password';
+                          } else {
+                            if (!regex.hasMatch(text)) {
+                              return 'Enter valid password';
+                            } else {
+                              return null;
+                            }
+                          }
+                        },
+                        obscuretext: true,
+                        textStyle: AppStyle.med16white,
                         borderSideColor: AppColors.greyColor,
-                        controller: emailController,
+                        controller: passwordController,
                         hintstyle: AppStyle.med16white,
-                        textInputType: TextInputType.emailAddress,
+                        textInputType: TextInputType.visiblePassword,
                         prefixicon: Image.asset(AppImages.passIcon),
                         suffixicon: Image.asset(AppImages.hiddenIcon),
                         hintText: 'Password',
@@ -82,8 +121,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       SizedBox(height: height * 0.02,),
                       Customtextfield(
+                        validator: (text) {
+                           if(text==passwordController.text){
+                             return 'valid password';
+                           }
+                           return'invalid password';
+                        },
+                        textStyle: AppStyle.med16white,
                         borderSideColor: AppColors.greyColor,
-                        controller: passwordController,
+                        controller: rePasswordController,
                         obscuretext: true,
                         textInputType: TextInputType.phone,
                         suffixicon: Image.asset(AppImages.hiddenIcon),
@@ -93,8 +139,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       SizedBox(height: height * 0.02,),
                       Customtextfield(
+                        validator: (text) {
+                          Pattern pattern =
+                              r'/^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/';
+                          RegExp regex = new RegExp(pattern.toString());
+                          if (!regex.hasMatch(text!))
+                            return 'Enter Valid Phone Number';
+                          else
+                            return null;
+                        },
+                        textStyle: AppStyle.med16white,
                         borderSideColor: AppColors.greyColor,
-                        controller: repassworddController,
+                        controller: phoneController,
                         obscuretext: true,
                         textInputType: TextInputType.phone,
                         prefixicon: Image.asset(AppImages.phoneIcon),
@@ -102,7 +158,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       hintstyle: AppStyle.med16white,
                       ),
                       SizedBox(height: height * 0.02,),
-                      Customelevatedbuttom(onPressed: (){},
+                      Customelevatedbuttom(onPressed: (){
+                        if(formkey.currentState!.validate()==true){
+                          Navigator.pop(context);
+                        }
+                      },
                         elevatedchild: Text('Create Account',
                           style: AppStyle.med20black,),
                         elevatedcolor: AppColors.prirmaryColor,),

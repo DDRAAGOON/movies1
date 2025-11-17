@@ -37,23 +37,49 @@ class _LoginscreenState extends State<Loginscreen> {
                Image.asset(AppImages.group),
               SizedBox(height: height * 0.03),
               Form(
+
                 key: formkey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
 
                     Customtextfield(
+                      textStyle: AppStyle.med16white,
                         hintstyle: AppStyle.med16white,
                       borderSideColor: Colors.grey,
                       controller: emailController,
                       textInputType: TextInputType.emailAddress,
-
+                        validator: (text) {
+                          if (text == null || text.trim().isEmpty) {
+                            return 'Please Enter Email';
+                          }
+                          final bool emailValid = RegExp(
+                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+                          ).hasMatch(text);
+                          if (!emailValid) {
+                            return 'Please enter valid,email ';
+                          }
+                        },
 
                        prefixicon: Image.asset(AppImages.emailIcon),
                       hintText: 'Email'
                     ),
                     SizedBox(height: height * 0.02),
                     Customtextfield(
+                      validator: (text) {
+                            RegExp regex =
+                            RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+                            if (text!.isEmpty) {
+                            return 'Please enter password';
+                            } else {
+                            if (!regex.hasMatch(text)) {
+                            return 'Enter valid password';
+                            } else {
+                            return null;
+                            }
+                            }
+                            },
+                      textStyle: AppStyle.med16white,
                       hintstyle: AppStyle.med16white,
                       borderSideColor: Colors.grey,
 
@@ -82,7 +108,11 @@ class _LoginscreenState extends State<Loginscreen> {
                     SizedBox(height: height * 0.02),
                     Customelevatedbuttom(
 
-                      onPressed:  (){},
+                      onPressed:  (){
+                        if(formkey.currentState!.validate()==true){
+                          // Navigator.push(context, Approute.registerScreen);
+                        }
+                      },
 elevatedcolor: AppColors.prirmaryColor,
                        elevatedchild: Text(
                   'Login',
