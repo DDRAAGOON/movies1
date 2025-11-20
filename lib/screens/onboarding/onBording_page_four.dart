@@ -12,13 +12,14 @@ class OnbordingPageFour extends StatelessWidget {
     return Scaffold(
       body: CustemScreen(
         image: "assets/images/badBoys.png",
-
         title: "Create Watchlists",
         descriprion:
             "Save movies to your watchlist to keep track of what you want to watch next. Enjoy films in various qualities and genres.",
         startOpacityColor: Color(0xff4C2471),
         endOpacityColor: Color(0xff4C2471),
         theRoute: OnbordingPageFive.routeName,
+        showBackButton: true,
+        cardHeight: 340,
       ),
     );
   }

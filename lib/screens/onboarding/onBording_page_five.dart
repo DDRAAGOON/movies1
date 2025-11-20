@@ -17,7 +17,9 @@ class OnbordingPageFive extends StatelessWidget {
             "Share your thoughts on the movies you've watched. Dive deep into film details and help others discover great movies with your reviews.",
         startOpacityColor: Color(0xff601321),
         endOpacityColor: Color(0xff601321),
-        theRoute: OnbordingPageSix.routeName ,
+        theRoute: OnbordingPageSix.routeName,
+        showBackButton: true,
+        cardHeight: 340,
       ),
     );
   }

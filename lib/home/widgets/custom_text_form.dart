@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../utils/app_colors.dart';
-import '../utils/app_styles.dart';
+import 'package:movies1/core/app_colors.dart';
+import 'package:movies1/core/app_text_styles.dart';
 
 class CustomTextForm extends StatelessWidget {
   Color borderSideColor;
@@ -28,10 +28,10 @@ class CustomTextForm extends StatelessWidget {
           decoration: InputDecoration(
             filled: true,
             fillColor: AppColors.greyColor,
-            enabledBorder: builtDecorationBorder(borderSideColor:borderSideColor ),
+            enabledBorder: builtDecorationBorder(borderSideColor: borderSideColor),
             focusedBorder: builtDecorationBorder(borderSideColor: borderSideColor),
-            errorBorder: builtDecorationBorder(borderSideColor: AppColors.redColor),
-            focusedErrorBorder: builtDecorationBorder(borderSideColor: AppColors.redColor),
+            errorBorder: builtDecorationBorder(borderSideColor: AppColors.red),
+            focusedErrorBorder: builtDecorationBorder(borderSideColor: AppColors.red),
             hintText: hintText,
             hintStyle: hintStyle ?? AppStyles.medium14White ,
             prefixIcon: prefixIcon,

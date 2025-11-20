@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:movies1/Utls/routes.dart';
-
 import 'custem_screen.dart';
 
 class OnbordingPageSix extends StatelessWidget {
@@ -14,10 +13,11 @@ class OnbordingPageSix extends StatelessWidget {
         image: "assets/images/end.png",
         title: "Start Watching Now",
         textForElevatedButton: "Finish",
-        startOpacityColor: const Color(0xff2A2C30),
-        endOpacityColor: const Color(0xff2A2C30),
-        // After finishing onboarding, go to the login screen
+        startOpacityColor: Color(0xff2A2C30),
+        endOpacityColor: Color(0xff2A2C30),
         theRoute: AppRoutes.login,
+        showBackButton: true,
+        cardHeight: 340,
       ),
     );
   }

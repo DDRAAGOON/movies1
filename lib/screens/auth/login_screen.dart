@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:movies1/Utls/colors.dart';
-import 'package:movies1/Utls/images.dart';
-import 'package:movies1/Utls/textStyle.dart';
+import 'package:movies1/core/app_colors.dart';
+import 'package:movies1/core/app_assets.dart';
+import 'package:movies1/core/app_text_styles.dart';
 import 'package:movies1/screens/auth/register_screen.dart';
 import 'package:movies1/widget/toogle.dart';
 import '../../widget/customElevatedButton.dart';
 import '../../widget/custom_text_field.dart';
-import 'auth_service.dart';
-import 'user_model.dart';
 import 'forget_password_screen.dart';
 
 final formkey = GlobalKey<FormState>();
@@ -29,30 +27,14 @@ class _LoginscreenState extends State<Loginscreen> {
 
     setState(() => isLoading = true);
 
-    try {
-      final UserModel res = await AuthService.login(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
+    await Future<void>.delayed(const Duration(milliseconds: 500));
 
-      final code = res.statusCode ?? 0;
-      if (code == 200 || code == 201) {
+    if (!mounted) return;
+    Navigator.of(context).pushReplacementNamed('/home');
 
-        Navigator.of(context).pushReplacementNamed('/home');
-      } else {
-
-        final msg = res.message.isNotEmpty ? res.message : 'Login failed';
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(msg)),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+    if (mounted) {
+      setState(() => isLoading = false);
     }
-
-    setState(() => isLoading = false);
   }
 
   @override

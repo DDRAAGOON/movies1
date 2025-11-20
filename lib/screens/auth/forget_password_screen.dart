@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies1/core/app_colors.dart';
 
-import 'auth_service.dart';
-import 'user_model.dart';
-
 class ForgetPasswordPage extends StatefulWidget {
   const ForgetPasswordPage({super.key});
 
@@ -26,28 +23,14 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
     setState(() => isLoading = true);
 
-    try {
-      final UserModel res = await AuthService.sendResetEmail(email: email);
+    await Future<void>.delayed(const Duration(milliseconds: 500));
 
-      final code = res.statusCode ?? 0;
-      final msg = res.message.isNotEmpty ? res.message : 'Request sent';
-
-      if (code == 200 || code == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(msg)),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(msg)),
-        );
-      }
-    } catch (e) {
+    if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
+        const SnackBar(content: Text('Request sent')),
       );
+      setState(() => isLoading = false);
     }
-
-    setState(() => isLoading = false);
   }
 
   @override

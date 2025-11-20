@@ -45,6 +45,6 @@ class AppRoutes {
     home: (context) => const HomeScreen(),
     movieDetails: (context) => const MovieDetailsScreen(),
 
-    updateProfile: (context) => const UpdateProfilePage(),
+    // updateProfile: (context) => const UpdateProfilePage(),
   };
 }

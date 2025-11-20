@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movies1/Utls/colors.dart';
-import 'package:movies1/Utls/textStyle.dart';
+import 'package:movies1/core/app_text_styles.dart';
 typedef Onvalidator=String? Function(String?)?;
 class Customtextfield extends StatelessWidget {
   Customtextfield({

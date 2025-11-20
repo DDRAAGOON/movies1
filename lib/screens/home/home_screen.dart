@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:movies1/home/utils/app_assets.dart';
-import 'package:movies1/home/utils/app_colors.dart';
+import 'package:movies1/core/app_assets.dart';
+import 'package:movies1/core/app_colors.dart';
 import 'package:movies1/screens/home/browse_tab.dart';
 import 'package:movies1/screens/home/home_tab.dart';
 import 'package:movies1/screens/home/profile_tab.dart';

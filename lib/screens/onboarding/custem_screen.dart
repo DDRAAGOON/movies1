@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../Utls/colors.dart';
+import 'package:movies1/core/app_colors.dart';
 import 'custom_elevated_button.dart';
 
 class CustemScreen extends StatelessWidget {
@@ -12,6 +12,12 @@ class CustemScreen extends StatelessWidget {
   String textForOutlineButton;
   String theRoute;
 
+  String textForBackButton;
+  Color? backButtonColor;
+  bool showBackButton;
+
+  double? cardHeight;
+
   CustemScreen({
     super.key,
     required this.image,
@@ -22,6 +28,10 @@ class CustemScreen extends StatelessWidget {
     required this.startOpacityColor,
     required this.endOpacityColor,
     required this.theRoute,
+    this.textForBackButton = "Back",
+    this.backButtonColor,
+    this.showBackButton = false,
+    this.cardHeight,
   });
 
   @override
@@ -30,8 +40,6 @@ class CustemScreen extends StatelessWidget {
       body: Stack(
         children: [
           SizedBox(
-            width: double.infinity,
-            height: double.infinity,
             child: Image.asset(image, fit: BoxFit.fill),
           ),
           Container(
@@ -61,7 +69,7 @@ class CustemScreen extends StatelessWidget {
                   color: AppColors.blackColor,
                 ),
                 width: double.infinity,
-                height: 260,
+                height: cardHeight ?? 260,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -113,6 +121,44 @@ class CustemScreen extends StatelessWidget {
                           ),
                         ],
                       ),
+
+                      if (showBackButton) ...[
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                    side: BorderSide(
+                                      color: Color(0xffF6BD00),
+                                      width: 2,
+                                    ),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                    vertical: 10,
+                                  ),
+                                  backgroundColor: Color(0xff121312),
+                                  shadowColor: Colors.black.withOpacity(0.5),
+                                  elevation: 5,
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  textForBackButton,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Color(0xffF6BD00),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ],
                   ),
                 ),

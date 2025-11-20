@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:movies1/Utls/images.dart';
-import 'package:movies1/Utls/textStyle.dart';
+import 'package:movies1/core/app_assets.dart';
+import 'package:movies1/core/app_text_styles.dart';
 import 'package:movies1/widget/toogle.dart';
-import '../../Utls/colors.dart';
+import 'package:movies1/core/app_colors.dart';
 import '../../widget/customElevatedButton.dart';
 import '../../widget/custom_text_field.dart';
-import 'auth_service.dart';
-import 'user_model.dart';
 
 final formkey = GlobalKey<FormState>();
 
@@ -38,50 +36,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     setState(() => isLoading = true);
 
-    try {
+    await Future<void>.delayed(const Duration(milliseconds: 500));
 
-      final UserModel res = await AuthService.register(
-        name: nameController.text.trim(),
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-        confirmPassword: confirmPasswordController.text.trim(),
-        phone: phoneController.text.trim(),
-        avaterId: 1,
-      );
+    if (!mounted) return;
+    Navigator.of(context).pushReplacementNamed('/home');
 
-      final regCode = res.statusCode ?? 0;
-      if (regCode == 200 || regCode == 201) {
-        final UserModel loginRes = await AuthService.login(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim(),
-        );
-
-        final loginCode = loginRes.statusCode ?? 0;
-        if (loginCode == 200 || loginCode == 201) {
-          Navigator.of(context).pushReplacementNamed('/home');
-        } else {
-          final msg = loginRes.message.isNotEmpty
-              ? loginRes.message
-              : 'Login failed';
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(msg)),
-          );
-        }
-      } else {
-        final msg = res.message.isNotEmpty
-            ? res.message
-            : 'Registration failed';
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(msg)),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+    if (mounted) {
+      setState(() => isLoading = false);
     }
-
-    setState(() => isLoading = false);
   }
 
   @override

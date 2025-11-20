@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:movies1/Utls/colors.dart';
-import 'package:movies1/Utls/images.dart';
+import 'package:movies1/core/app_colors.dart';
+import 'package:movies1/core/app_assets.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class Toogle extends StatelessWidget {

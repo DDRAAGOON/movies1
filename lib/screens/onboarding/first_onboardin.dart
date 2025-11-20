@@ -18,8 +18,9 @@ class FirstOnboarding extends StatelessWidget {
             fit: BoxFit.fill,
           ),
         ),
+
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 30),
+          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -36,8 +37,7 @@ class FirstOnboarding extends StatelessWidget {
               Text(
                 "Get access to a huge library of movies to suit all tastes. You will surely like it.",
                 style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
+                  color: Colors.white60,
                   fontSize: 20,
                 ),
               ),
@@ -45,17 +45,12 @@ class FirstOnboarding extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SecondScreen(),
-                        ),
-                      );
-                    },
-                    child: Text("Go To Second Screen"),
-                  )
+                  Expanded(
+                    child: CustomElevatedButton(
+                      text: "Explore Now",
+                      routeName: SecondScreen.routeName,
+                    ),
+                  ),
                 ],
               ),
             ],

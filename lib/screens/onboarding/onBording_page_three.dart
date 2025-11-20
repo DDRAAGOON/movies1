@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'custem_screen.dart';
 import 'onBording_page_four.dart';
 
@@ -15,11 +14,12 @@ class OnbordingPageThree extends StatelessWidget {
         endOpacityColor: Color(0xff85210E),
         image: "assets/images/godfather.png",
         textForElevatedButton: "Next",
-
         title: "Explore All Genres",
         descriprion:
             "Discover movies from every genre, in all available qualities. Find something new and exciting to watch every day.",
-             theRoute: OnbordingPageFour.routeName ,
+        theRoute: OnbordingPageFour.routeName,
+        showBackButton: true,
+        cardHeight: 320,
       ),
     );
   }
