@@ -7,7 +7,7 @@ import 'package:movies1/screens/movie_details/movie_details_screen.dart';
 
 class HomeTab extends StatefulWidget {
   final Function(String)? onGenreSelected;
-  
+
   const HomeTab({super.key, this.onGenreSelected});
 
   @override
@@ -55,43 +55,44 @@ class _HomeTabState extends State<HomeTab> {
     });
 
     try {
-      // Load Available Now movies (latest)
-      final availableResponse = await MovieService.getLatestMovies(limit: 10, page: 1);
-      
-      // Load Action movies
+      final availableResponse = await MovieService.getLatestMovies(
+        limit: 10,
+        page: 1,
+      );
+
       final actionResponse = await MovieService.getMoviesByGenre(
         genre: 'Action',
         limit: 10,
         page: 1,
       );
 
-      // Load all movies for grid
       final allResponse = await MovieService.getLatestMovies(
         limit: 20,
         page: currentPage,
       );
 
-      if (availableResponse.statusCode == 200 && 
-          actionResponse.statusCode == 200 && 
+      if (availableResponse.statusCode == 200 &&
+          actionResponse.statusCode == 200 &&
           allResponse.statusCode == 200) {
-        
         final availableData = availableResponse.data;
         final actionData = actionResponse.data;
         final allData = allResponse.data;
 
         setState(() {
-          if (availableData['status'] == 'ok' && availableData['data'] != null) {
-            availableMovies = availableData['data']['movies'] as List<dynamic>? ?? [];
+          if (availableData['status'] == 'ok' &&
+              availableData['data'] != null) {
+            availableMovies =
+                availableData['data']['movies'] as List<dynamic>? ?? [];
           }
-          
+
           if (actionData['status'] == 'ok' && actionData['data'] != null) {
             actionMovies = actionData['data']['movies'] as List<dynamic>? ?? [];
           }
-          
+
           if (allData['status'] == 'ok' && allData['data'] != null) {
             allMovies = allData['data']['movies'] as List<dynamic>? ?? [];
           }
-          
+
           isLoading = false;
         });
       } else {
@@ -158,9 +159,7 @@ class _HomeTabState extends State<HomeTab> {
   Widget _buildBody() {
     if (isLoading && availableMovies.isEmpty) {
       return const Center(
-        child: CircularProgressIndicator(
-          color: AppColors.primary,
-        ),
+        child: CircularProgressIndicator(color: AppColors.primary),
       );
     }
 
@@ -169,11 +168,7 @@ class _HomeTabState extends State<HomeTab> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.error_outline,
-              color: Colors.red,
-              size: 64,
-            ),
+            const Icon(Icons.error_outline, color: Colors.red, size: 64),
             const SizedBox(height: 16),
             Text(
               errorMessage,
@@ -196,13 +191,15 @@ class _HomeTabState extends State<HomeTab> {
     return CustomScrollView(
       controller: _scrollController,
       slivers: [
-        // Available Now Section
         SliverToBoxAdapter(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 child: Text(
                   'Available Now',
                   style: AppStyles.bold20White.copyWith(
@@ -225,7 +222,9 @@ class _HomeTabState extends State<HomeTab> {
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: _buildCarouselMovieCard(availableMovies[index]),
+                            child: _buildCarouselMovieCard(
+                              availableMovies[index],
+                            ),
                           );
                         },
                       ),
@@ -235,7 +234,6 @@ class _HomeTabState extends State<HomeTab> {
           ),
         ),
 
-        // Watch Now Section
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -249,31 +247,26 @@ class _HomeTabState extends State<HomeTab> {
           ),
         ),
 
-        // Action Section
         SliverToBoxAdapter(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Action',
-                      style: AppStyle.med20white,
-                    ),
+                    Text('Action', style: AppStyle.med20white),
                     TextButton(
                       onPressed: () {
-                        // Navigate to browse with Action filter
                         if (widget.onGenreSelected != null) {
                           widget.onGenreSelected!('Action');
                         }
                       },
-                      child: Text(
-                        'See More →',
-                        style: AppStyle.med14primary,
-                      ),
+                      child: Text('See More →', style: AppStyle.med14primary),
                     ),
                   ],
                 ),
@@ -293,7 +286,9 @@ class _HomeTabState extends State<HomeTab> {
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.only(right: 12),
-                            child: _buildHorizontalMovieCard(actionMovies[index]),
+                            child: _buildHorizontalMovieCard(
+                              actionMovies[index],
+                            ),
                           );
                         },
                       ),
@@ -303,7 +298,6 @@ class _HomeTabState extends State<HomeTab> {
           ),
         ),
 
-        // All Movies Grid
         SliverPadding(
           padding: const EdgeInsets.all(16),
           sliver: SliverGrid(
@@ -313,21 +307,16 @@ class _HomeTabState extends State<HomeTab> {
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
             ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                if (index < allMovies.length) {
-                  return _buildMovieCard(allMovies[index]);
-                } else if (isLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.primary,
-                    ),
-                  );
-                }
-                return null;
-              },
-              childCount: allMovies.length + (isLoading ? 2 : 0),
-            ),
+            delegate: SliverChildBuilderDelegate((context, index) {
+              if (index < allMovies.length) {
+                return _buildMovieCard(allMovies[index]);
+              } else if (isLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(color: AppColors.primary),
+                );
+              }
+              return null;
+            }, childCount: allMovies.length + (isLoading ? 2 : 0)),
           ),
         ),
       ],
@@ -335,12 +324,13 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget _buildCarouselMovieCard(dynamic movie) {
-    final String? imageUrl = movie['large_cover_image'] ?? movie['medium_cover_image'];
+    final String? imageUrl =
+        movie['large_cover_image'] ?? movie['medium_cover_image'];
     final String title = movie['title'] ?? 'Unknown';
     final double rating = (movie['rating'] ?? 0.0).toDouble();
 
     final int movieId = movie['id'] ?? 0;
-    
+
     return GestureDetector(
       onTap: () {
         if (movieId > 0) {
@@ -388,7 +378,6 @@ class _HomeTabState extends State<HomeTab> {
                     ),
                   ),
           ),
-          // Rating Badge
           Positioned(
             top: 12,
             left: 12,
@@ -401,11 +390,7 @@ class _HomeTabState extends State<HomeTab> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(
-                    Icons.star,
-                    color: AppColors.primary,
-                    size: 16,
-                  ),
+                  const Icon(Icons.star, color: AppColors.primary, size: 16),
                   const SizedBox(width: 4),
                   Text(
                     rating.toStringAsFixed(1),
@@ -418,7 +403,6 @@ class _HomeTabState extends State<HomeTab> {
               ),
             ),
           ),
-          // Title at bottom
           Positioned(
             bottom: 0,
             left: 0,
@@ -454,7 +438,8 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget _buildHorizontalMovieCard(dynamic movie) {
-    final String? imageUrl = movie['medium_cover_image'] ?? movie['large_cover_image'];
+    final String? imageUrl =
+        movie['medium_cover_image'] ?? movie['large_cover_image'];
     final String title = movie['title'] ?? 'Unknown';
     final double rating = (movie['rating'] ?? 0.0).toDouble();
     final int movieId = movie['id'] ?? 0;
@@ -511,12 +496,14 @@ class _HomeTabState extends State<HomeTab> {
                             ),
                           ),
                   ),
-                  // Rating Badge
                   Positioned(
                     top: 6,
                     left: 6,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5,
+                        vertical: 3,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.black.withValues(alpha: 0.7),
                         borderRadius: BorderRadius.circular(6),
@@ -559,7 +546,8 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget _buildMovieCard(dynamic movie) {
-    final String? imageUrl = movie['medium_cover_image'] ?? movie['large_cover_image'];
+    final String? imageUrl =
+        movie['medium_cover_image'] ?? movie['large_cover_image'];
     final String title = movie['title'] ?? 'Unknown';
     final int year = movie['year'] ?? 0;
     final double rating = (movie['rating'] ?? 0.0).toDouble();
@@ -584,13 +572,14 @@ class _HomeTabState extends State<HomeTab> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Movie Poster with Rating Badge
             Expanded(
               flex: 3,
               child: Stack(
                 children: [
                   ClipRRect(
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(12),
+                    ),
                     child: imageUrl != null
                         ? CachedNetworkImage(
                             imageUrl: imageUrl,
@@ -622,12 +611,14 @@ class _HomeTabState extends State<HomeTab> {
                             ),
                           ),
                   ),
-                  // Rating Badge in top left corner
                   Positioned(
                     top: 8,
                     left: 8,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.black.withValues(alpha: 0.7),
                         borderRadius: BorderRadius.circular(8),
@@ -655,7 +646,6 @@ class _HomeTabState extends State<HomeTab> {
                 ],
               ),
             ),
-            // Movie Info
             Expanded(
               flex: 2,
               child: Padding(
@@ -664,14 +654,12 @@ class _HomeTabState extends State<HomeTab> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Title
                     Text(
                       title,
                       style: AppStyle.med14white,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    // Year
                     if (year > 0)
                       Text(
                         year.toString(),

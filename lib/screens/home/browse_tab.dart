@@ -206,7 +206,6 @@ class BrowseTabState extends State<BrowseTab> {
       body: SafeArea(
         child: Column(
           children: [
-            // Genre Filters
             Container(
               height: 50,
               padding: const EdgeInsets.symmetric(vertical: 8),
@@ -256,7 +255,6 @@ class BrowseTabState extends State<BrowseTab> {
               ),
             ),
 
-            // Movies Grid
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () => _loadMovies(isRefresh: true),
@@ -359,7 +357,6 @@ class BrowseTabState extends State<BrowseTab> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Movie Poster with Rating Badge
             Expanded(
               flex: 3,
               child: Stack(
@@ -397,7 +394,6 @@ class BrowseTabState extends State<BrowseTab> {
                             ),
                           ),
                   ),
-                  // Rating Badge in top left corner
                   Positioned(
                     top: 8,
                     left: 8,
@@ -430,7 +426,6 @@ class BrowseTabState extends State<BrowseTab> {
                 ],
               ),
             ),
-            // Movie Info
             Expanded(
               flex: 2,
               child: Padding(
@@ -439,14 +434,12 @@ class BrowseTabState extends State<BrowseTab> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Title
                     Text(
                       title,
                       style: AppStyle.med14white,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    // Year
                     if (year > 0)
                       Text(
                         year.toString(),

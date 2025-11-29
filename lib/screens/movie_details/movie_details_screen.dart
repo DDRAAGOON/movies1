@@ -8,7 +8,7 @@ import 'package:movies1/api/history_service.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
   final int movieId;
-  
+
   const MovieDetailsScreen({super.key, required this.movieId});
 
   @override
@@ -39,11 +39,13 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
   Future<void> _addToHistory(dynamic movie) async {
     try {
-      final String title = movie['title_english'] ?? movie['title'] ?? 'Unknown';
-      final String? imageUrl = movie['large_cover_image'] ?? movie['medium_cover_image'];
+      final String title =
+          movie['title_english'] ?? movie['title'] ?? 'Unknown';
+      final String? imageUrl =
+          movie['large_cover_image'] ?? movie['medium_cover_image'];
       final int year = movie['year'] ?? 0;
       final double rating = (movie['rating'] ?? 0.0).toDouble();
-      
+
       await HistoryService.addToHistory(
         movieId: widget.movieId,
         title: title,
@@ -51,9 +53,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         year: year,
         rating: rating,
       );
-    } catch (e) {
-      // Silently fail if history addition fails
-    }
+    } catch (e) {}
   }
 
   Future<void> _loadMovieDetails() async {
@@ -63,14 +63,12 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     });
 
     try {
-      // Load movie details with images and cast
       final detailsResponse = await MovieService.getMovieDetails(
         movieId: widget.movieId,
         withImages: true,
         withCast: true,
       );
 
-      // Load similar movies
       final suggestionsResponse = await MovieService.getMovieSuggestions(
         movieId: widget.movieId,
       );
@@ -83,8 +81,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
             movieData = movie;
             isLoading = false;
           });
-          
-          // Add to history when movie details are loaded
+
           _addToHistory(movie);
         } else {
           setState(() {
@@ -101,12 +98,14 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         });
       }
 
-      // Load similar movies
-      if (suggestionsResponse.statusCode == 200 && suggestionsResponse.data != null) {
+      if (suggestionsResponse.statusCode == 200 &&
+          suggestionsResponse.data != null) {
         final suggestionsData = suggestionsResponse.data;
-        if (suggestionsData['status'] == 'ok' && suggestionsData['data'] != null) {
+        if (suggestionsData['status'] == 'ok' &&
+            suggestionsData['data'] != null) {
           setState(() {
-            similarMovies = suggestionsData['data']['movies'] as List<dynamic>? ?? [];
+            similarMovies =
+                suggestionsData['data']['movies'] as List<dynamic>? ?? [];
           });
         }
       }
@@ -125,168 +124,136 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       backgroundColor: AppColors.black,
       body: isLoading
           ? const Center(
-              child: CircularProgressIndicator(
-                color: AppColors.primary,
-              ),
+              child: CircularProgressIndicator(color: AppColors.primary),
             )
           : hasError
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.error_outline,
-                        color: Colors.red,
-                        size: 64,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        errorMessage,
-                        style: AppStyle.med16white,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: _loadMovieDetails,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                        ),
-                        child: const Text('Retry'),
-                      ),
-                    ],
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, color: Colors.red, size: 64),
+                  const SizedBox(height: 16),
+                  Text(
+                    errorMessage,
+                    style: AppStyle.med16white,
+                    textAlign: TextAlign.center,
                   ),
-                )
-              : movieData == null
-                  ? const Center(
-                      child: Text(
-                        'Movie not found',
-                        style: TextStyle(color: AppColors.white),
-                      ),
-                    )
-                  : CustomScrollView(
-                      slivers: [
-                        // Header with back button and bookmark
-                        SliverAppBar(
-                          backgroundColor: AppColors.black,
-                          pinned: true,
-                          leading: Container(
-                            margin: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: AppColors.gray,
-                              shape: BoxShape.circle,
-                            ),
-                            child: IconButton(
-                              icon: const Icon(
-                                Icons.arrow_back,
-                                color: AppColors.white,
-                              ),
-                              onPressed: () => Navigator.pop(context),
-                            ),
-                          ),
-                          title: Text(
-                            'Movie Details',
-                            style: AppStyle.med20white,
-                          ),
-                          actions: [
-                            Container(
-                              margin: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: AppColors.gray,
-                                shape: BoxShape.circle,
-                              ),
-                              child: IconButton(
-                                icon: Icon(
-                                  isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-                                  color: AppColors.primary,
-                                ),
-                                onPressed: () async {
-                                  if (movieData == null) return;
-                                  
-                                  if (isBookmarked) {
-                                    // Remove from wishlist
-                                    await WishListService.removeFromWishList(widget.movieId);
-                                  } else {
-                                    // Add to wishlist
-                                    final String title = movieData['title_english'] ?? movieData['title'] ?? 'Unknown';
-                                    final String? imageUrl = movieData['large_cover_image'] ?? movieData['medium_cover_image'];
-                                    final int year = movieData['year'] ?? 0;
-                                    final double rating = (movieData['rating'] ?? 0.0).toDouble();
-                                    
-                                    await WishListService.addToWishList(
-                                      movieId: widget.movieId,
-                                      title: title,
-                                      imageUrl: imageUrl,
-                                      year: year,
-                                      rating: rating,
-                                    );
-                                  }
-                                  setState(() {
-                                    isBookmarked = !isBookmarked;
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        // Movie Poster with Play Button
-                        SliverToBoxAdapter(
-                          child: _buildMoviePoster(),
-                        ),
-
-                        // Movie Title and Year
-                        SliverToBoxAdapter(
-                          child: _buildMovieTitle(),
-                        ),
-
-                        // Watch Button
-                        SliverToBoxAdapter(
-                          child: _buildWatchButton(),
-                        ),
-
-                        // Statistics (Likes, Duration, Rating)
-                        SliverToBoxAdapter(
-                          child: _buildStatistics(),
-                        ),
-
-                        // Screen Shots Section
-                        SliverToBoxAdapter(
-                          child: _buildScreenShots(),
-                        ),
-
-                        // Similar Movies Section
-                        SliverToBoxAdapter(
-                          child: _buildSimilarMovies(),
-                        ),
-
-                        // Summary Section
-                        SliverToBoxAdapter(
-                          child: _buildSummary(),
-                        ),
-
-                        // Cast Section
-                        SliverToBoxAdapter(
-                          child: _buildCast(),
-                        ),
-
-                        // Genres Section
-                        SliverToBoxAdapter(
-                          child: _buildGenres(),
-                        ),
-
-                        const SliverToBoxAdapter(
-                          child: SizedBox(height: 24),
-                        ),
-                      ],
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: _loadMovieDetails,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
                     ),
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            )
+          : movieData == null
+          ? const Center(
+              child: Text(
+                'Movie not found',
+                style: TextStyle(color: AppColors.white),
+              ),
+            )
+          : CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  backgroundColor: AppColors.black,
+                  pinned: true,
+                  leading: Container(
+                    margin: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.gray,
+                      shape: BoxShape.circle,
+                    ),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: AppColors.white,
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
+                  title: Text('Movie Details', style: AppStyle.med20white),
+                  actions: [
+                    Container(
+                      margin: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppColors.gray,
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                          color: AppColors.primary,
+                        ),
+                        onPressed: () async {
+                          if (movieData == null) return;
+
+                          if (isBookmarked) {
+                            await WishListService.removeFromWishList(
+                              widget.movieId,
+                            );
+                          } else {
+                            final String title =
+                                movieData['title_english'] ??
+                                movieData['title'] ??
+                                'Unknown';
+                            final String? imageUrl =
+                                movieData['large_cover_image'] ??
+                                movieData['medium_cover_image'];
+                            final int year = movieData['year'] ?? 0;
+                            final double rating = (movieData['rating'] ?? 0.0)
+                                .toDouble();
+
+                            await WishListService.addToWishList(
+                              movieId: widget.movieId,
+                              title: title,
+                              imageUrl: imageUrl,
+                              year: year,
+                              rating: rating,
+                            );
+                          }
+                          setState(() {
+                            isBookmarked = !isBookmarked;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+
+                SliverToBoxAdapter(child: _buildMoviePoster()),
+
+                SliverToBoxAdapter(child: _buildMovieTitle()),
+
+                SliverToBoxAdapter(child: _buildWatchButton()),
+
+                SliverToBoxAdapter(child: _buildStatistics()),
+
+                SliverToBoxAdapter(child: _buildScreenShots()),
+
+                SliverToBoxAdapter(child: _buildSimilarMovies()),
+
+                SliverToBoxAdapter(child: _buildSummary()),
+
+                SliverToBoxAdapter(child: _buildCast()),
+
+                SliverToBoxAdapter(child: _buildGenres()),
+
+                const SliverToBoxAdapter(child: SizedBox(height: 24)),
+              ],
+            ),
     );
   }
 
   Widget _buildMoviePoster() {
-    final String? imageUrl = movieData['large_cover_image'] ?? 
-                            movieData['medium_cover_image'] ??
-                            movieData['background_image'];
-    
+    final String? imageUrl =
+        movieData['large_cover_image'] ??
+        movieData['medium_cover_image'] ??
+        movieData['background_image'];
+
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -300,9 +267,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                   height: 400,
                   color: AppColors.gray,
                   child: const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.primary,
-                    ),
+                    child: CircularProgressIndicator(color: AppColors.primary),
                   ),
                 ),
                 errorWidget: (context, url, error) => Container(
@@ -318,13 +283,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
             : Container(
                 height: 400,
                 color: AppColors.gray,
-                child: const Icon(
-                  Icons.movie,
-                  color: Colors.white54,
-                  size: 64,
-                ),
+                child: const Icon(Icons.movie, color: Colors.white54, size: 64),
               ),
-        // Play Button
         Container(
           width: 80,
           height: 80,
@@ -332,11 +292,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
             color: AppColors.primary,
             shape: BoxShape.circle,
           ),
-          child: const Icon(
-            Icons.play_arrow,
-            color: AppColors.white,
-            size: 48,
-          ),
+          child: const Icon(Icons.play_arrow, color: AppColors.white, size: 48),
         ),
       ],
     );
@@ -362,9 +318,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
             const SizedBox(height: 8),
             Text(
               year.toString(),
-              style: AppStyle.med14white.copyWith(
-                color: Colors.white70,
-              ),
+              style: AppStyle.med14white.copyWith(color: Colors.white70),
             ),
           ],
         ],
@@ -378,9 +332,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       child: SizedBox(
         width: double.infinity,
         child: ElevatedButton(
-          onPressed: () {
-            // Navigate to watch screen
-          },
+          onPressed: () {},
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.red,
             padding: const EdgeInsets.symmetric(vertical: 16),
@@ -390,9 +342,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
           ),
           child: Text(
             'Watch',
-            style: AppStyle.med16white.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: AppStyle.med16white.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -411,7 +361,11 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         children: [
           _buildStatItem(Icons.favorite, AppColors.primary, likes.toString()),
           _buildStatItem(Icons.access_time, AppColors.primary, '$runtime'),
-          _buildStatItem(Icons.star, AppColors.primary, rating.toStringAsFixed(1)),
+          _buildStatItem(
+            Icons.star,
+            AppColors.primary,
+            rating.toStringAsFixed(1),
+          ),
         ],
       ),
     );
@@ -429,10 +383,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         children: [
           Icon(icon, color: color, size: 20),
           const SizedBox(width: 8),
-          Text(
-            value,
-            style: AppStyle.med14white,
-          ),
+          Text(value, style: AppStyle.med14white),
         ],
       ),
     );
@@ -440,7 +391,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
   Widget _buildScreenShots() {
     final List<dynamic> screenshots = movieData['screenshots'] ?? [];
-    
+
     if (screenshots.isEmpty) return const SizedBox.shrink();
 
     return Column(
@@ -540,7 +491,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   }
 
   Widget _buildSimilarMovieCard(dynamic movie) {
-    final String? imageUrl = movie['medium_cover_image'] ?? movie['large_cover_image'];
+    final String? imageUrl =
+        movie['medium_cover_image'] ?? movie['large_cover_image'];
     final String title = movie['title'] ?? 'Unknown';
     final double rating = (movie['rating'] ?? 0.0).toDouble();
 
@@ -594,7 +546,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       ),
                     ),
             ),
-            // Rating Badge
             Positioned(
               top: 8,
               left: 8,
@@ -607,11 +558,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(
-                      Icons.star,
-                      color: AppColors.primary,
-                      size: 12,
-                    ),
+                    const Icon(Icons.star, color: AppColors.primary, size: 12),
                     const SizedBox(width: 2),
                     Text(
                       rating.toStringAsFixed(1),
@@ -630,10 +577,11 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   }
 
   Widget _buildSummary() {
-    final String description = movieData['description_full'] ?? 
-                              movieData['description_intro'] ?? 
-                              movieData['synopsis'] ?? 
-                              'No description available.';
+    final String description =
+        movieData['description_full'] ??
+        movieData['description_intro'] ??
+        movieData['synopsis'] ??
+        'No description available.';
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -663,7 +611,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
   Widget _buildCast() {
     final List<dynamic> cast = movieData['cast'] ?? [];
-    
+
     if (cast.isEmpty) return const SizedBox.shrink();
 
     return Padding(
@@ -755,9 +703,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                 const SizedBox(height: 4),
                 Text(
                   'Character : $character',
-                  style: AppStyle.med12white.copyWith(
-                    color: Colors.white70,
-                  ),
+                  style: AppStyle.med12white.copyWith(color: Colors.white70),
                 ),
               ],
             ),
@@ -769,7 +715,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
   Widget _buildGenres() {
     final List<dynamic> genres = movieData['genres'] ?? [];
-    
+
     if (genres.isEmpty) return const SizedBox.shrink();
 
     return Padding(
@@ -790,15 +736,15 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
             runSpacing: 12,
             children: genres.map((genre) {
               return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.gray,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Text(
-                  genre.toString(),
-                  style: AppStyle.med14white,
-                ),
+                child: Text(genre.toString(), style: AppStyle.med14white),
               );
             }).toList(),
           ),

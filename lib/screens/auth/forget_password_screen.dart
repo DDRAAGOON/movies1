@@ -16,9 +16,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   Future<void> _sendResetEmail() async {
     final email = emailController.text.trim();
     if (email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter your email')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please enter your email')));
       return;
     }
 
@@ -33,21 +33,21 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
     try {
       final FirebaseAuth auth = FirebaseAuth.instance;
-      
-      // إرسال رابط إعادة تعيين كلمة المرور
+
       await auth.sendPasswordResetEmail(email: email);
 
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني'),
+          content: Text(
+            'تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني',
+          ),
           backgroundColor: Colors.green,
           duration: Duration(seconds: 4),
         ),
       );
 
-      // Return to login screen after 2 seconds
       await Future.delayed(const Duration(seconds: 2));
       if (mounted) {
         Navigator.pop(context);
@@ -117,18 +117,11 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         child: Column(
           children: [
             const SizedBox(height: 30),
-            Image.asset(
-              'assets/forget/Forgot.png',
-              height: 430,
-              width: 430,
-            ),
+            Image.asset('assets/forget/Forgot.png', height: 430, width: 430),
             const SizedBox(height: 40),
             TextField(
               controller: emailController,
-              style: const TextStyle(
-                color: AppColors.white,
-                fontSize: 16,
-              ),
+              style: const TextStyle(color: AppColors.white, fontSize: 16),
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.email, color: AppColors.white),
                 hintText: 'Email',
@@ -168,10 +161,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       )
                     : const Text(
                         'Verify Email',
-                        style: TextStyle(
-                          color: AppColors.black,
-                          fontSize: 20,
-                        ),
+                        style: TextStyle(color: AppColors.black, fontSize: 20),
                       ),
               ),
             ),

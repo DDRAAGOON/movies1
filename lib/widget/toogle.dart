@@ -11,7 +11,6 @@ class Toogle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final languageProvider = Provider.of<LanguageProvider>(context);
-    // initialLabelIndex: 0 for Arabic (Egypt), 1 for English (USA)
     final initialIndex = languageProvider.locale == 'ar' ? 0 : 1;
     
     return Center(

@@ -50,30 +50,24 @@ class _ProfileTabState extends State<ProfileTab> {
 
   Future<void> _loadUserProfile() async {
     try {
-      // Get user from Firebase first
       final User? firebaseUser = FirebaseAuth.instance.currentUser;
       
       if (firebaseUser != null) {
-        // Get display name from Firebase (set during registration)
         String? firebaseName = firebaseUser.displayName;
         
         setState(() {
-          // Use Firebase display name if available, otherwise try API
           if (firebaseName != null && firebaseName.isNotEmpty) {
             userName = firebaseName;
             isLoading = false;
           } else {
-            // Fallback to API if Firebase name is not available
             _loadUserProfileFromAPI();
             return;
           }
         });
       } else {
-        // No Firebase user, try API
         _loadUserProfileFromAPI();
       }
     } catch (e) {
-      // If Firebase fails, try API
       _loadUserProfileFromAPI();
     }
   }
@@ -85,7 +79,6 @@ class _ProfileTabState extends State<ProfileTab> {
         final userData = response.data['data'] ?? response.data;
         setState(() {
           userName = userData['name'] ?? 'User';
-          // Handle both 'avatar' and 'avaterId' fields, and convert to string
           if (userData['avaterId'] != null) {
             userAvatar = userData['avaterId'].toString();
           } else if (userData['avatar'] != null) {
@@ -162,7 +155,6 @@ class ProfileBody extends StatelessWidget {
       return const AssetImage('assets/edit/gamer.png');
     }
     
-    // Map avatar ID to asset path (1-9)
     final avatarMap = {
       '1': 'assets/edit/1.png',
       '2': 'assets/edit/2.png',
@@ -220,7 +212,7 @@ class ProfileBody extends StatelessWidget {
                                 MaterialPageRoute(
                                   builder: (context) => const WishListScreen(),
                                 ),
-                              ).then((_) => onRefresh()); // Refresh after returning
+                              ).then((_) => onRefresh());
                             },
                             child: Column(
                               children: [
@@ -286,7 +278,6 @@ class ProfileBody extends StatelessWidget {
                                 builder: (context) => const EditProfilePage(),
                               ),
                             );
-                            // Refresh profile after returning from edit page
                             if (result == true) {
                               onRefresh();
                             }
@@ -409,7 +400,6 @@ class ProfileBody extends StatelessWidget {
                   ),
                 ),
 
-                // Content based on selected tab
                 Container(
                   color: AppColors.black,
                   width: double.infinity,

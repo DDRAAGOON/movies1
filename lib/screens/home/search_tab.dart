@@ -36,8 +36,7 @@ class _SearchTabState extends State<SearchTab> {
 
   void _onSearchChanged() {
     final query = _searchController.text.trim();
-    
-    // Cancel previous timer
+
     _debounceTimer?.cancel();
 
     if (query.isEmpty) {
@@ -48,7 +47,6 @@ class _SearchTabState extends State<SearchTab> {
       return;
     }
 
-    // Debounce search - wait 500ms after user stops typing
     _debounceTimer = Timer(const Duration(milliseconds: 500), () {
       _performSearch(query);
     });
@@ -69,10 +67,7 @@ class _SearchTabState extends State<SearchTab> {
     });
 
     try {
-      final response = await MovieService.searchMovies(
-        query: query,
-        limit: 20,
-      );
+      final response = await MovieService.searchMovies(query: query, limit: 20);
 
       if (response.statusCode == 200 && response.data != null) {
         final data = response.data;
@@ -116,7 +111,6 @@ class _SearchTabState extends State<SearchTab> {
       body: SafeArea(
         child: Column(
           children: [
-            // Search Bar
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Container(
@@ -156,10 +150,7 @@ class _SearchTabState extends State<SearchTab> {
               ),
             ),
 
-            // Content Area
-            Expanded(
-              child: _buildContent(),
-            ),
+            Expanded(child: _buildContent()),
           ],
         ),
       ),
@@ -167,50 +158,34 @@ class _SearchTabState extends State<SearchTab> {
   }
 
   Widget _buildContent() {
-    // Show popcorn image if no search has been performed
     if (!hasSearched) {
       return Center(
-        child: Image.asset(
-          AppAssets.popcorn,
-          width: 124,
-          height: 124,
-        ),
+        child: Image.asset(AppAssets.popcorn, width: 124, height: 124),
       );
     }
 
-    // Show loading indicator
     if (isLoading) {
       return const Center(
-        child: CircularProgressIndicator(
-          color: AppColors.primary,
-        ),
+        child: CircularProgressIndicator(color: AppColors.primary),
       );
     }
 
-    // Show no results message
     if (searchResults.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.search_off,
-              color: Colors.white54,
-              size: 64,
-            ),
+            const Icon(Icons.search_off, color: Colors.white54, size: 64),
             const SizedBox(height: 16),
             Text(
               'No movies found',
-              style: AppStyle.med16white.copyWith(
-                color: Colors.white54,
-              ),
+              style: AppStyle.med16white.copyWith(color: Colors.white54),
             ),
           ],
         ),
       );
     }
 
-    // Show search results in Grid
     return GridView.builder(
       padding: const EdgeInsets.all(16),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -227,7 +202,8 @@ class _SearchTabState extends State<SearchTab> {
   }
 
   Widget _buildMovieCard(dynamic movie) {
-    final String? imageUrl = movie['medium_cover_image'] ?? movie['large_cover_image'];
+    final String? imageUrl =
+        movie['medium_cover_image'] ?? movie['large_cover_image'];
     final String title = movie['title'] ?? 'Unknown';
     final int year = movie['year'] ?? 0;
     final double rating = (movie['rating'] ?? 0.0).toDouble();
@@ -252,13 +228,14 @@ class _SearchTabState extends State<SearchTab> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Movie Poster with Rating Badge
             Expanded(
               flex: 3,
               child: Stack(
                 children: [
                   ClipRRect(
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(12),
+                    ),
                     child: imageUrl != null
                         ? CachedNetworkImage(
                             imageUrl: imageUrl,
@@ -290,12 +267,14 @@ class _SearchTabState extends State<SearchTab> {
                             ),
                           ),
                   ),
-                  // Rating Badge in top left corner
                   Positioned(
                     top: 8,
                     left: 8,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.black.withOpacity(0.7),
                         borderRadius: BorderRadius.circular(8),
@@ -323,7 +302,6 @@ class _SearchTabState extends State<SearchTab> {
                 ],
               ),
             ),
-            // Movie Info
             Expanded(
               flex: 2,
               child: Padding(
@@ -332,14 +310,12 @@ class _SearchTabState extends State<SearchTab> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Title
                     Text(
                       title,
                       style: AppStyle.med14white,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    // Year
                     if (year > 0)
                       Text(
                         year.toString(),

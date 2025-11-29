@@ -10,17 +10,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   try {
-    // Initialize Firebase
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
   } catch (e) {
-    // Handle Firebase initialization error
     debugPrint('Firebase initialization error: $e');
-    // Continue without Firebase if initialization fails
   }
   
-  // Initialize DioHelper
   DioHelper.init();
   
   runApp(const MyApp());

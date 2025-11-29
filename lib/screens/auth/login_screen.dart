@@ -38,23 +38,21 @@ class _LoginscreenState extends State<Loginscreen> {
 
     try {
       final FirebaseAuth auth = FirebaseAuth.instance;
-      
-      // تسجيل الدخول باستخدام Firebase
-      final UserCredential userCredential = await auth.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
+
+      final UserCredential userCredential = await auth
+          .signInWithEmailAndPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
+          );
 
       if (!mounted) return;
 
       if (userCredential.user != null) {
-        // حفظ التوكن (ID Token من Firebase)
         final String? idToken = await userCredential.user?.getIdToken();
         if (idToken != null && idToken.isNotEmpty) {
           await TokenManager.save(idToken);
         }
 
-        // Show success message
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -65,13 +63,15 @@ class _LoginscreenState extends State<Loginscreen> {
           );
         }
 
-        // انتقل للـ Home مباشرة بعد النجاح
         if (mounted) {
           Navigator.pushReplacementNamed(context, routes.AppRoutes.home);
         }
       }
     } on FirebaseAuthException catch (e) {
-      final locale = Provider.of<LanguageProvider>(context, listen: false).locale;
+      final locale = Provider.of<LanguageProvider>(
+        context,
+        listen: false,
+      ).locale;
       final localizations = AppLocalizations.of(locale);
       String errorMsg = localizations.loginError;
 
@@ -108,11 +108,14 @@ class _LoginscreenState extends State<Loginscreen> {
       }
     } catch (e) {
       if (mounted) {
-        final locale = Provider.of<LanguageProvider>(context, listen: false).locale;
+        final locale = Provider.of<LanguageProvider>(
+          context,
+          listen: false,
+        ).locale;
         final localizations = AppLocalizations.of(locale);
         String errorMsg = localizations.unexpectedError;
         if (e.toString().contains('API key')) {
-          errorMsg = locale == 'ar' 
+          errorMsg = locale == 'ar'
               ? 'مشكلة في إعدادات Firebase. يرجى التحقق من API key'
               : 'Firebase settings issue. Please check API key';
         }
@@ -131,41 +134,42 @@ class _LoginscreenState extends State<Loginscreen> {
     setState(() => isGoogleLoading = true);
 
     try {
-      // Configure Google Sign-In with scopes
       final GoogleSignIn googleSignIn = GoogleSignIn(
         scopes: ['email', 'profile'],
       );
-      
+
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
       if (googleUser == null) {
-        // المستخدم ألغى العملية
         if (mounted) {
           setState(() => isGoogleLoading = false);
         }
         return;
       }
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+      final UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithCredential(credential);
 
       if (!mounted) return;
 
       if (userCredential.user != null) {
-        // حفظ التوكن (ID Token من Firebase)
         final String? idToken = await userCredential.user?.getIdToken();
         if (idToken != null && idToken.isNotEmpty) {
           await TokenManager.save(idToken);
         }
 
-        // Show success message
         if (mounted) {
-          final locale = Provider.of<LanguageProvider>(context, listen: false).locale;
+          final locale = Provider.of<LanguageProvider>(
+            context,
+            listen: false,
+          ).locale;
           final localizations = AppLocalizations.of(locale);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -176,16 +180,18 @@ class _LoginscreenState extends State<Loginscreen> {
           );
         }
 
-        // انتقل للـ Home مباشرة بعد النجاح
         if (mounted) {
           Navigator.pushReplacementNamed(context, routes.AppRoutes.home);
         }
       }
     } on FirebaseAuthException catch (e) {
-      final locale = Provider.of<LanguageProvider>(context, listen: false).locale;
+      final locale = Provider.of<LanguageProvider>(
+        context,
+        listen: false,
+      ).locale;
       final localizations = AppLocalizations.of(locale);
       String errorMsg = localizations.googleLoginError;
-      
+
       switch (e.code) {
         case 'account-exists-with-different-credential':
           errorMsg = localizations.accountExistsWithDifferentCredential;
@@ -210,30 +216,34 @@ class _LoginscreenState extends State<Loginscreen> {
       }
     } catch (e) {
       if (mounted) {
-        final locale = Provider.of<LanguageProvider>(context, listen: false).locale;
+        final locale = Provider.of<LanguageProvider>(
+          context,
+          listen: false,
+        ).locale;
         final localizations = AppLocalizations.of(locale);
         String errorMsg = localizations.googleLoginError;
-        
-        // Log the full error for debugging
+
         debugPrint('Google Sign-In Error: ${e.toString()}');
         debugPrint('Error Type: ${e.runtimeType}');
-        
-        // Handle specific Google Sign-In errors
+
         final errorString = e.toString().toLowerCase();
-        
-        if (errorString.contains('sign_in_failed') || errorString.contains('sign_in_canceled')) {
-          // User cancelled, don't show error
+
+        if (errorString.contains('sign_in_failed') ||
+            errorString.contains('sign_in_canceled')) {
           if (mounted) {
             setState(() => isGoogleLoading = false);
           }
           return;
-        } else if (errorString.contains('network') || errorString.contains('socket')) {
+        } else if (errorString.contains('network') ||
+            errorString.contains('socket')) {
           errorMsg = localizations.networkError;
-        } else if (errorString.contains('developer_error') || errorString.contains('10:')) {
+        } else if (errorString.contains('developer_error') ||
+            errorString.contains('10:')) {
           errorMsg = locale == 'ar'
               ? 'خطأ في إعدادات التطبيق. يرجى التأكد من تفعيل Google Sign-In في Firebase Console'
               : 'App configuration error. Please make sure Google Sign-In is enabled in Firebase Console';
-        } else if (errorString.contains('api_not_configured') || errorString.contains('12500')) {
+        } else if (errorString.contains('api_not_configured') ||
+            errorString.contains('12500')) {
           errorMsg = locale == 'ar'
               ? 'Google Sign-In غير مفعّل في Firebase Console. يرجى تفعيله من Authentication > Sign-in method'
               : 'Google Sign-In not enabled in Firebase Console. Please enable it from Authentication > Sign-in method';
@@ -246,12 +256,11 @@ class _LoginscreenState extends State<Loginscreen> {
               ? 'خطأ داخلي. يرجى المحاولة مرة أخرى'
               : 'Internal error. Please try again';
         } else {
-          // Show detailed error for debugging
           errorMsg = locale == 'ar'
               ? 'خطأ في تسجيل الدخول بجوجل: ${e.toString().split(':').last.trim()}'
               : 'Google login error: ${e.toString().split(':').last.trim()}';
         }
-        
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(errorMsg),
@@ -321,7 +330,9 @@ class _LoginscreenState extends State<Loginscreen> {
                       obscuretext: !isPasswordVisible,
                       textInputType: TextInputType.visiblePassword,
                       suffixicon: Image.asset(
-                        isPasswordVisible ? AppAssets.iconEyePass : AppAssets.hiddenIcon,
+                        isPasswordVisible
+                            ? AppAssets.iconEyePass
+                            : AppAssets.hiddenIcon,
                       ),
                       onSuffixIconTap: () {
                         setState(() {
@@ -355,7 +366,10 @@ class _LoginscreenState extends State<Loginscreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text(localizations.forgetPassword, style: AppStyle.med14primary),
+                          Text(
+                            localizations.forgetPassword,
+                            style: AppStyle.med14primary,
+                          ),
                         ],
                       ),
                     ),
@@ -369,40 +383,63 @@ class _LoginscreenState extends State<Loginscreen> {
                           : AppColors.primary,
                       elevatedchild: isLoading
                           ? const SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: CircularProgressIndicator(
-                          color: Colors.black,
-                          strokeWidth: 3,
-                        ),
-                      )
-                          : Text(localizations.login, style: AppStyle.med20black),
+                              height: 24,
+                              width: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.black,
+                                strokeWidth: 3,
+                              ),
+                            )
+                          : Text(
+                              localizations.login,
+                              style: AppStyle.med20black,
+                            ),
                     ),
 
-                    // باقي الـ UI زي ما هو (Google, Register, OR, Toggle...)
-                    // مش هغيّره عشان ما يتكسرش عندك
                     SizedBox(height: height * 0.02),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(localizations.dontHaveAccount, style: AppStyle.med14white),
+                        Text(
+                          localizations.dontHaveAccount,
+                          style: AppStyle.med14white,
+                        ),
                         TextButton(
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                              MaterialPageRoute(
+                                builder: (context) => const RegisterScreen(),
+                              ),
                             );
                           },
-                          child: Text(localizations.createOne, style: AppStyle.med14primary),
+                          child: Text(
+                            localizations.createOne,
+                            style: AppStyle.med14primary,
+                          ),
                         ),
                       ],
                     ),
                     SizedBox(height: height * 0.02),
                     Row(
                       children: [
-                        Expanded(child: Divider(thickness: 2, indent: width * 0.04, endIndent: width * 0.04, color: AppColors.primary)),
+                        Expanded(
+                          child: Divider(
+                            thickness: 2,
+                            indent: width * 0.04,
+                            endIndent: width * 0.04,
+                            color: AppColors.primary,
+                          ),
+                        ),
                         Text(localizations.or, style: AppStyle.med14primary),
-                        Expanded(child: Divider(thickness: 2, indent: width * 0.04, endIndent: width * 0.04, color: AppColors.primary)),
+                        Expanded(
+                          child: Divider(
+                            thickness: 2,
+                            indent: width * 0.04,
+                            endIndent: width * 0.04,
+                            color: AppColors.primary,
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(height: height * 0.02),
@@ -425,7 +462,10 @@ class _LoginscreenState extends State<Loginscreen> {
                               children: [
                                 Image.asset(AppAssets.googleIcon),
                                 SizedBox(width: width * 0.02),
-                                Text(localizations.loginWithGoogle, style: AppStyle.med16black),
+                                Text(
+                                  localizations.loginWithGoogle,
+                                  style: AppStyle.med16black,
+                                ),
                               ],
                             ),
                     ),

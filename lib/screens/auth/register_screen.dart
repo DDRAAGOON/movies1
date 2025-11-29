@@ -37,8 +37,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     final locale = Provider.of<LanguageProvider>(context, listen: false).locale;
     final localizations = AppLocalizations.of(locale);
-    
-    if (passwordController.text.trim() != confirmPasswordController.text.trim()) {
+
+    if (passwordController.text.trim() !=
+        confirmPasswordController.text.trim()) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(localizations.passwordMismatch),
@@ -52,26 +53,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     try {
       final FirebaseAuth auth = FirebaseAuth.instance;
-      
-      // إنشاء حساب جديد في Firebase
-      final UserCredential userCredential = await auth.createUserWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
+
+      final UserCredential userCredential = await auth
+          .createUserWithEmailAndPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
+          );
 
       if (!mounted) return;
 
       if (userCredential.user != null) {
-        // حفظ التوكن (ID Token من Firebase)
         final String? idToken = await userCredential.user?.getIdToken();
         if (idToken != null && idToken.isNotEmpty) {
           await TokenManager.save(idToken);
         }
 
-        // تحديث اسم المستخدم في Firebase
-        await userCredential.user?.updateDisplayName(nameController.text.trim());
+        await userCredential.user?.updateDisplayName(
+          nameController.text.trim(),
+        );
 
-        final locale = Provider.of<LanguageProvider>(context, listen: false).locale;
+        final locale = Provider.of<LanguageProvider>(
+          context,
+          listen: false,
+        ).locale;
         final localizations = AppLocalizations.of(locale);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -80,11 +84,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         );
 
-        // انتقل للـ Home مباشرة
         Navigator.pushReplacementNamed(context, routes.AppRoutes.home);
       }
     } on FirebaseAuthException catch (e) {
-      final locale = Provider.of<LanguageProvider>(context, listen: false).locale;
+      final locale = Provider.of<LanguageProvider>(
+        context,
+        listen: false,
+      ).locale;
       final localizations = AppLocalizations.of(locale);
       String errorMsg = localizations.registerError;
 
@@ -115,11 +121,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
     } catch (e) {
       if (mounted) {
-        final locale = Provider.of<LanguageProvider>(context, listen: false).locale;
+        final locale = Provider.of<LanguageProvider>(
+          context,
+          listen: false,
+        ).locale;
         final localizations = AppLocalizations.of(locale);
         String errorMsg = localizations.registerError;
         if (e.toString().contains('API key')) {
-          errorMsg = locale == 'ar' 
+          errorMsg = locale == 'ar'
               ? 'مشكلة في إعدادات Firebase. يرجى التحقق من API key'
               : 'Firebase settings issue. Please check API key';
         } else if (e.toString().contains('network')) {
@@ -162,7 +171,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // كل الحقول زي ما هي (ممتازة أصلاً)
                     Customtextfield(
                       hintstyle: AppStyle.med16white,
                       fillcolor: AppColors.gray,
@@ -212,7 +220,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       textInputType: TextInputType.text,
                       prefixicon: Image.asset(AppAssets.passIcon),
                       suffixicon: Image.asset(
-                        isPasswordVisible ? AppAssets.iconEyePass : AppAssets.hiddenIcon,
+                        isPasswordVisible
+                            ? AppAssets.iconEyePass
+                            : AppAssets.hiddenIcon,
                       ),
                       onSuffixIconTap: () {
                         setState(() {
@@ -239,7 +249,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       textInputType: TextInputType.text,
                       prefixicon: Image.asset(AppAssets.passIcon),
                       suffixicon: Image.asset(
-                        isConfirmPasswordVisible ? AppAssets.iconEyePass : AppAssets.hiddenIcon,
+                        isConfirmPasswordVisible
+                            ? AppAssets.iconEyePass
+                            : AppAssets.hiddenIcon,
                       ),
                       onSuffixIconTap: () {
                         setState(() {
@@ -275,27 +287,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     const SizedBox(height: 24),
 
-                    // زرار التسجيل (معطل أثناء التحميل)
                     Customelevatedbuttom(
                       onPressed: isLoading ? () {} : registerUser,
-                      elevatedcolor: isLoading ? AppColors.primary.withOpacity(0.5) : AppColors.primary,
+                      elevatedcolor: isLoading
+                          ? AppColors.primary.withOpacity(0.5)
+                          : AppColors.primary,
                       elevatedchild: isLoading
                           ? const SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: CircularProgressIndicator(color: Colors.black, strokeWidth: 3),
-                      )
-                          : Text(localizations.createAccount, style: AppStyle.med20black),
+                              height: 24,
+                              width: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.black,
+                                strokeWidth: 3,
+                              ),
+                            )
+                          : Text(
+                              localizations.createAccount,
+                              style: AppStyle.med20black,
+                            ),
                     ),
 
                     const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(localizations.alreadyHaveAccount, style: AppStyle.med14white),
+                        Text(
+                          localizations.alreadyHaveAccount,
+                          style: AppStyle.med14white,
+                        ),
                         TextButton(
                           onPressed: () => Navigator.of(context).pop(),
-                          child: Text(localizations.login, style: AppStyle.med14primary.copyWith(decoration: TextDecoration.underline)),
+                          child: Text(
+                            localizations.login,
+                            style: AppStyle.med14primary.copyWith(
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
                         ),
                       ],
                     ),
