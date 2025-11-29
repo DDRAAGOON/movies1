@@ -66,7 +66,7 @@ class CustemScreen extends StatelessWidget {
                     topLeft: Radius.circular(40),
                     topRight: Radius.circular(40),
                   ),
-                  color: AppColors.blackColor,
+                  color: AppColors.black,
                 ),
                 width: double.infinity,
                 height: cardHeight ?? 260,

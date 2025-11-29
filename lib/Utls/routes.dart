@@ -43,8 +43,8 @@ class AppRoutes {
     forgetPassword: (context) => const ForgetPasswordPage(),
 
     home: (context) => const HomeScreen(),
-    movieDetails: (context) => const MovieDetailsScreen(),
+    // movieDetails requires movieId parameter, so it should be navigated directly
+    // using Navigator.push with MaterialPageRoute instead of routes
 
-    // updateProfile: (context) => const UpdateProfilePage(),
   };
 }

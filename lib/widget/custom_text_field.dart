@@ -11,6 +11,7 @@ class Customtextfield extends StatelessWidget {
     this.prefixiconcolor,
     this.labelstyle,
     this.suffixicon,
+    this.onSuffixIconTap,
     this.labelText,
     this.preficiconstyle,
     this.validator,
@@ -30,6 +31,7 @@ class Customtextfield extends StatelessWidget {
   Widget? prefixicon;
   TextStyle? preficiconstyle;
   Widget? suffixicon;
+  VoidCallback? onSuffixIconTap;
   Onvalidator?validator;
   TextInputType? textInputType;
   bool obscuretext;
@@ -60,7 +62,12 @@ class Customtextfield extends StatelessWidget {
         labelStyle: labelstyle,
         hintText:hintText,
         hintStyle: hintstyle,
-        suffixIcon: suffixicon,
+        suffixIcon: suffixicon != null && onSuffixIconTap != null
+            ? GestureDetector(
+                onTap: onSuffixIconTap,
+                child: suffixicon,
+              )
+            : suffixicon,
 
       ),
 

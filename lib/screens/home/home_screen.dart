@@ -15,13 +15,35 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 int selectedIndex = 0;
-List<Widget> tabs =[
-  HomeTab(),SearchTab(),BrowseTab(),ProfileTab()
-];
+final GlobalKey<BrowseTabState> browseTabKey = GlobalKey<BrowseTabState>();
+List<Widget> tabs =[];
+
+@override
+void initState() {
+  super.initState();
+  _buildTabs();
+}
+
+void _buildTabs() {
+  tabs = [
+    HomeTab(
+      onGenreSelected: (genre) {
+        setState(() {
+          selectedIndex = 2; // Switch to Browse tab
+        });
+        // Update BrowseTab genre
+        browseTabKey.currentState?.selectGenre(genre);
+      },
+    ),
+    SearchTab(),
+    BrowseTab(key: browseTabKey),
+    ProfileTab(),
+  ];
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.blackColor,
+      backgroundColor: AppColors.black,
       extendBody: true,
       bottomNavigationBar:
            Container(
@@ -45,7 +67,7 @@ List<Widget> tabs =[
                  showSelectedLabels: false,
                  showUnselectedLabels: false,
                  type: BottomNavigationBarType.fixed,
-                 backgroundColor: AppColors.greyColor,
+                 backgroundColor: AppColors.gray,
                   items: [
                    builtBottomNavBarItem(
                        index: 0,

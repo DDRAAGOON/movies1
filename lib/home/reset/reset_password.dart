@@ -14,13 +14,13 @@ class ResetPassword extends StatelessWidget {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: AppColors.blackColor,
+      backgroundColor: AppColors.black,
       appBar: AppBar(
-        backgroundColor: AppColors.blackColor,
+        backgroundColor: AppColors.black,
         title: Text('Reset Password',style: AppStyles.bold16Orange,),
         centerTitle: true,
         iconTheme: IconThemeData(
-            color: AppColors.orangeColor,
+            color: AppColors.primary,
             size: 30
         ),
       ),
@@ -46,7 +46,7 @@ class ResetPassword extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: width*0.3,
                       vertical: height*0.02),
-                  backgroundColor: AppColors.orangeColor,
+                  backgroundColor: AppColors.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   )

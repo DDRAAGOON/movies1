@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:movies1/core/app_colors.dart';
 
 class ForgetPasswordPage extends StatefulWidget {
@@ -21,15 +22,74 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       return;
     }
 
+    if (!email.contains('@') || !email.contains('.')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid email')),
+      );
+      return;
+    }
+
     setState(() => isLoading = true);
 
-    await Future<void>.delayed(const Duration(milliseconds: 500));
+    try {
+      final FirebaseAuth auth = FirebaseAuth.instance;
+      
+      // إرسال رابط إعادة تعيين كلمة المرور
+      await auth.sendPasswordResetEmail(email: email);
 
-    if (mounted) {
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Request sent')),
+        const SnackBar(
+          content: Text('تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 4),
+        ),
       );
-      setState(() => isLoading = false);
+
+      // Return to login screen after 2 seconds
+      await Future.delayed(const Duration(seconds: 2));
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    } on FirebaseAuthException catch (e) {
+      String errorMsg = 'حدث خطأ، حاول مرة أخرى';
+
+      switch (e.code) {
+        case 'user-not-found':
+          errorMsg = 'البريد الإلكتروني غير موجود';
+          break;
+        case 'invalid-email':
+          errorMsg = 'الإيميل غير صحيح';
+          break;
+        case 'too-many-requests':
+          errorMsg = 'محاولات كثيرة، حاول مرة أخرى لاحقاً';
+          break;
+        default:
+          errorMsg = e.message ?? 'حدث خطأ أثناء إرسال البريد';
+      }
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorMsg), backgroundColor: Colors.red),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        String errorMsg = 'حدث خطأ غير متوقع';
+        if (e.toString().contains('API key')) {
+          errorMsg = 'مشكلة في إعدادات Firebase. يرجى التحقق من API key';
+        } else if (e.toString().contains('network')) {
+          errorMsg = 'مشكلة في الاتصال بالإنترنت';
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorMsg), backgroundColor: Colors.red),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => isLoading = false);
+      }
     }
   }
 
@@ -91,7 +151,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               height: 55,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.yellow,
+                  backgroundColor: AppColors.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),

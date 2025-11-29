@@ -9,7 +9,7 @@ class CustomTextForm extends StatelessWidget {
   Widget? prefixIcon;
   Widget? suffixIcon;
   CustomTextForm({super.key,
-    this.borderSideColor = AppColors.greyColor,
+    this.borderSideColor = AppColors.gray,
     this.hintStyle , required this.hintText,
     this.prefixIcon , this.suffixIcon});
 
@@ -20,14 +20,14 @@ class CustomTextForm extends StatelessWidget {
     return Padding(
       padding:  EdgeInsets.symmetric(horizontal: width*0.03 ),
       child: TextFormField(
-          cursorColor: AppColors.whiteColor,
+          cursorColor: AppColors.white,
           style: TextStyle(
-            color: AppColors.whiteColor,
+            color: AppColors.white,
             fontSize: 18,
           ),
           decoration: InputDecoration(
             filled: true,
-            fillColor: AppColors.greyColor,
+            fillColor: AppColors.gray,
             enabledBorder: builtDecorationBorder(borderSideColor: borderSideColor),
             focusedBorder: builtDecorationBorder(borderSideColor: borderSideColor),
             errorBorder: builtDecorationBorder(borderSideColor: AppColors.red),
